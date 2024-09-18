@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="title">
+    <h1>Shoping</h1>
+  </div>
+
+  <div class="log">
+    <form [formGroup]="loginForm" (submit)="submit()">
+      <mat-form-field *ngIf="!LoggedIn" class="form-field" appearance="outline">
+        <mat-label> User Name </mat-label>
+        <input matInput formControlName="userName" required />
+      </mat-form-field>
+
+      <mat-form-field *ngIf="!LoggedIn" class="form-field" appearance="outline">
+        <mat-label> Password </mat-label>
+        <input matInput formControlName="password" type="password" required />
+      </mat-form-field>
+      <button *ngIf="!LoggedIn" mat-raised-button color="primary" type="submit">
+        Log In
+      </button>
+    </form>
+  </div>
+
+  <button mat-button [matMenuTriggerFor]="menu" color="primary" class="reg">
+    Menu
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item [disabled]="!LoggedIn">Browse Products</button>
+    <button mat-menu-item *ngIf="LoggedIn">Edit Products</button>
+    <button mat-menu-item *ngIf="LoggedIn">Users Status</button>
+    <button mat-menu-item *ngIf="LoggedIn">LogOut</button>
+    <button mat-menu-item *ngIf="!LoggedIn">Register</button>
+  </mat-menu>
+</div>

@@ -24,7 +24,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             return await _context.Products.ToListAsync();
         }

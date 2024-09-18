@@ -1,0 +1,17 @@
+<div class="wrapper">
+  <mat-card class="cardWrapper">
+    <h1 class="marg-down">Register</h1>
+    <form [formGroup]="registerForm" (submit)="submit()">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label> User Name </mat-label>
+        <input matInput formControlName="userName" required />
+      </mat-form-field>
+
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label> Password </mat-label>
+        <input matInput formControlName="password" type="password" required />
+      </mat-form-field>
+      <button mat-raised-button color="primary" class="marg-down" type="submit">Register</button>
+    </form>
+  </mat-card>
+</div>

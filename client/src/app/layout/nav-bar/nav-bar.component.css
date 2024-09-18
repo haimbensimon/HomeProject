@@ -1,0 +1,46 @@
+*{
+  color:#ddd
+}
+a{
+  text-decoration: none;
+}
+.container{
+  width: 100%;
+  height: 90px;
+  background-color: #333;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.title{
+  margin-left: 40px;
+  flex :2;
+}
+.log{
+  margin-right: 20px;
+  flex:3;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.marg-left{
+margin-left: 10px;
+}
+
+.mdc-text-field__input{
+  color: #ddd !important;
+
+}
+form{
+margin-top: 20px !important;
+}
+
+.mat-mdc-form-field{
+  margin-right: 10px !important;
+}
+.reg{
+  margin-left: 40px;
+  flex :1;
+}

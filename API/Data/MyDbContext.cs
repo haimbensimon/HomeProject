@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
 
@@ -11,6 +7,7 @@ namespace API.Data
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categorys { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
 
         public MyDbContext()
         {
@@ -51,8 +48,19 @@ namespace API.Data
                 ent.Property(p => p.Desc).HasColumnName("DESC");
             });
 
-          
-         
+            modelBuilder.Entity<AppUser>(ent =>
+            {
+                ent.ToTable("AppUsers");
+                ent.HasKey(p => p.Id);
+                ent.Property(p => p.Id).ValueGeneratedOnAdd();
+                ent.Property(p => p.Id).HasColumnName("ID");
+                ent.Property(p => p.UserName).HasColumnName("USER_NAME");
+                ent.Property(p => p.PasswordHash).HasColumnName("PASSWORD_HASH");
+                ent.Property(p => p.PasswordSalt).HasColumnName("PASSWORD_SALT");
+            });
+
+
+
         }
     }
 }
