@@ -21,6 +21,7 @@ import { BrowseProductComponent } from './products/browse-product/browse-product
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { UsersStatusComponent } from './products/users-status/users-status.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatTableModule} from '@angular/material/table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +48,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HttpClientModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -19,6 +19,8 @@ using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
+using API.Mapping;
 
 namespace API
 {
@@ -43,6 +45,7 @@ namespace API
                     .AllowCredentials()
                     .Build()));
 
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ILogService, LogService>();
             services.AddScoped<ITokenService, TokenService>();

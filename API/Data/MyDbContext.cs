@@ -32,7 +32,7 @@ namespace API.Data
             {
                 ent.ToTable("Products");
                 ent.HasKey(p => p.Id);
-                ent.Property(p => p.Id).ValueGeneratedNever();
+                ent.Property(p => p.Id).ValueGeneratedOnAdd();
                 ent.Property(p => p.Id).HasColumnName("ID");
                 ent.Property(p => p.Desc).HasColumnName("DESC");
                 ent.Property(p => p.Price).HasColumnName("PRICE");

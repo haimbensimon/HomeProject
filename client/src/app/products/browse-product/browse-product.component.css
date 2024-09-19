@@ -1,0 +1,22 @@
+.filtering{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+mat-form-field{
+  width: 25%;
+  margin-left: 10px;
+}
+.container{
+  min-height: 65vh;
+  max-height: 66vh;
+}
+#search{
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+.filtering
+{width: 100% !important;}
+table {
+  width: 100%;
+}

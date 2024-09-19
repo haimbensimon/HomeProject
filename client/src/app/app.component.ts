@@ -1,6 +1,5 @@
 import { User } from './account/models/User';
 import { Component, OnInit } from '@angular/core';
-import { ProductServiceService } from './product-service.service';
 import { AccountServiceService } from './account-service.service';
 
 @Component({
@@ -11,19 +10,10 @@ import { AccountServiceService } from './account-service.service';
 export class AppComponent implements OnInit {
   title = 'client';
   item: string = 'user';
-  constructor(
-    private productService: ProductServiceService,
-    private accountService: AccountServiceService
-  ) {}
+  constructor(private accountService: AccountServiceService) {}
 
   ngOnInit(): void {
     this.setCurrentUser();
-    this.productService.getAllProduct().subscribe(
-      (result) => {
-        console.log(result);
-      },
-      (error) => console.log(error)
-    );
   }
 
   setCurrentUser() {
