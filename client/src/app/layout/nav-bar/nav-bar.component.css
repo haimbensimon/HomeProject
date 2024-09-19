@@ -44,3 +44,7 @@ margin-top: 20px !important;
   margin-left: 40px;
   flex :1;
 }
+
+h1{
+  cursor: pointer;
+}

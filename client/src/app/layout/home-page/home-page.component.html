@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <mat-card class="card-wrapper">
+    <div>
+      <h1>Wellcome To Shop</h1>
+      <h2>Place to find all you need...</h2>
+    </div>
+
+    <button
+      routerLink="/register"
+      *ngIf="!(accountService.currentUser$ | async)"
+      mat-raised-button
+      color="primary"
+    >
+      Register
+    </button>
+  </mat-card>
+</div>
+<div *ngIf="registerMode">
+  <app-register (cancelRgister)="cancelRegistration($event)"></app-register>
+</div>

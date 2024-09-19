@@ -15,9 +15,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 import { RegisterComponent } from './account/register/register.component';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
+import { HomePageComponent } from './layout/home-page/home-page.component';
+import { BrowseProductComponent } from './products/browse-product/browse-product.component';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { UsersStatusComponent } from './products/users-status/users-status.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
-  declarations: [AppComponent, NavBarComponent, RegisterComponent],
+  declarations: [
+    AppComponent,
+    NavBarComponent,
+    RegisterComponent,
+    HomePageComponent,
+    BrowseProductComponent,
+    EditProductComponent,
+    UsersStatusComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -32,7 +45,8 @@ import {MatMenuModule} from '@angular/material/menu';
     MatDialogModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,8 +1,10 @@
+import { Observable } from 'rxjs';
 import { registerUser } from './../../account/models/registerModel';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AccountServiceService } from 'src/app/account-service.service';
 import { loginUser } from 'src/app/account/models/loginModel';
+import { User } from 'src/app/account/models/User';
 
 @Component({
   selector: 'app-nav-bar',
@@ -11,11 +13,10 @@ import { loginUser } from 'src/app/account/models/loginModel';
 })
 export class NavBarComponent implements OnInit {
   loginForm!: FormGroup;
-  LoggedIn: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private accountService: AccountServiceService
+    public accountService: AccountServiceService
   ) {}
 
   ngOnInit(): void {
@@ -23,9 +24,10 @@ export class NavBarComponent implements OnInit {
       userName: new FormControl(),
       password: new FormControl(),
     });
+
   }
 
-  submit() {
+  submit(): void {
     if (!this.loginForm.valid) {
       return;
     }
@@ -39,7 +41,6 @@ export class NavBarComponent implements OnInit {
     this.accountService.login(model).subscribe(
       (result) => {
         console.log(result);
-        this.LoggedIn = true;
       },
       (err) => console.log(err.error)
     );
@@ -47,6 +48,5 @@ export class NavBarComponent implements OnInit {
 
   logOut() {
     this.accountService.logOut();
-    this.LoggedIn = false;
   }
 }

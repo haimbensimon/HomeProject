@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AccountServiceService } from 'src/app/account-service.service';
 import { registerUser } from '../models/registerModel';
@@ -10,6 +10,7 @@ import { registerUser } from '../models/registerModel';
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
+  @Output() cancelRgister = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,5 +40,9 @@ export class RegisterComponent implements OnInit {
       },
       (err) => console.log(err.error)
     );
+  }
+
+  cancel() {
+    this.cancelRgister.emit(false);
   }
 }

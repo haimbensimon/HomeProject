@@ -1,0 +1,29 @@
+.wrapper{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5%;
+}
+
+.card-wrapper{
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10%;
+  background-color: #ddd5;
+}
+h1{
+  font-size: 60px;
+  padding: 20px;
+}
+h2{
+  padding: 20px;
+}
+
+button{
+  margin-top: 40px;
+  font-size: 26px;
+  width: 200px;
+  padding: 40px;
+}

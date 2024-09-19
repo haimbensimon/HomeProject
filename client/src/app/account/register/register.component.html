@@ -4,14 +4,37 @@
     <form [formGroup]="registerForm" (submit)="submit()">
       <mat-form-field class="form-field" appearance="outline">
         <mat-label> User Name </mat-label>
-        <input matInput formControlName="userName" required />
+        <input
+          matInput
+          formControlName="userName"
+          required
+          autocomplete="off"
+        />
       </mat-form-field>
 
       <mat-form-field class="form-field" appearance="outline">
         <mat-label> Password </mat-label>
-        <input matInput formControlName="password" type="password" required />
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          required
+          autocomplete="off"
+        />
       </mat-form-field>
-      <button mat-raised-button color="primary" class="marg-down" type="submit">Register</button>
+      <div class="buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          class="marg-down"
+          type="submit"
+        >
+          Register
+        </button>
+        <button mat-raised-button color="accent" class="marg-down" (click)="cancel()">
+          Cancel
+        </button>
+      </div>
     </form>
   </mat-card>
 </div>
