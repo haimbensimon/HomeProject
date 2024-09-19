@@ -21,6 +21,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AutoMapper;
 using API.Mapping;
+using API.Entities;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace API
 {
@@ -61,6 +64,16 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
+            services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.Password.RequireNonAlphanumeric = false;
+            })
+                .AddRoles<AppRole>()
+                .AddRoleManager<RoleManager<AppRole>>()
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddRoleValidator<RoleValidator<AppRole>>()
+                .AddEntityFrameworkStores<MyDbContext>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -73,6 +86,11 @@ namespace API
                     };
 
                 });
+
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,8 +109,10 @@ namespace API
             app.UseCors("EnableCors");
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            
 
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

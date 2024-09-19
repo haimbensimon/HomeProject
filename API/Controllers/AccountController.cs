@@ -1,11 +1,9 @@
-﻿using API.Data;
-using API.Entities;
+﻿using API.Entities;
 using API.Models;
 using API.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -14,15 +12,24 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly MyDbContext _context;
+        
         private readonly ILogService _logService;
         private readonly ITokenService _tokenService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+       
 
-        public AccountController(MyDbContext context, ILogService logService, ITokenService tokenService)
+        public AccountController(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            ILogService logService,
+            ITokenService tokenService)
         {
-            _context = context;
+          
             _logService = logService;
             _tokenService = tokenService;
+            _userManager = userManager;
+            _signInManager = signInManager;  
         }
 
         [HttpPost]
@@ -33,10 +40,12 @@ namespace API.Controllers
 
             var user = await _logService.Register(registerModel);
 
+            if (user is null) return BadRequest("Register Invalid");
+
             return new UserDto
             {
                 UserName = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
@@ -44,23 +53,19 @@ namespace API.Controllers
         [Route("[action]")]
         public async Task<ActionResult<UserDto>> Login(LoginModel loginModel)
         {
-            var user = await _context.AppUsers.SingleOrDefaultAsync(x => x.UserName == loginModel.UserName.ToLower());
+            var user = await _userManager.Users.SingleOrDefaultAsync(x => x.UserName == loginModel.UserName.ToLower());
 
             if (user == null) return Unauthorized("Invalid user");
 
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginModel.Password));
-
-            for (int i = 0; i < computedHash.Length; i++)
-            {
-                if(computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
-            }
+            var result = await _signInManager
+                .CheckPasswordSignInAsync(user, loginModel.Password, false); 
+           
+            if (!result.Succeeded) return Unauthorized();
 
             return new UserDto
             {
                 UserName = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user)
             };
         }
 

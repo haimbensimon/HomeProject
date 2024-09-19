@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using API.Data;
-using System.Threading.Tasks;
 using API.Entities;
-using Microsoft.EntityFrameworkCore;
 using API.Services.Interfaces;
 
 namespace API.Controllers
@@ -15,12 +10,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly MyDbContext _context;
+       
         private readonly ICategoryService _service;
 
-        public CategoryController(MyDbContext context, ICategoryService service)
+        public CategoryController(ICategoryService service)
         {
-            _context = context;
             _service = service;
         }
 

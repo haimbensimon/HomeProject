@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './account/register/register.component';
+import { AdminGuard } from './admin.guard';
 import { AuthGuard } from './auth.guard';
 import { HomePageComponent } from './layout/home-page/home-page.component';
 import { BrowseProductComponent } from './products/browse-product/browse-product.component';
@@ -14,13 +15,20 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'register', component: RegisterComponent },
       { path: 'products', component: BrowseProductComponent },
-      { path: 'edit/products', component: EditProductComponent },
-      { path: 'users', component: UsersStatusComponent },
+      {
+        path: 'edit/products',
+        component: EditProductComponent,
+        canActivate: [AdminGuard],
+      },
+      {
+        path: 'users',
+        component: UsersStatusComponent,
+        canActivate: [AdminGuard],
+      },
     ],
   },
-
+  { path: 'register', component: RegisterComponent },
   { path: '**', component: HomePageComponent, pathMatch: 'full' },
 ];
 

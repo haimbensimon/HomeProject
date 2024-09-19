@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { registerUser } from './../../account/models/registerModel';
 import { Component, OnInit } from '@angular/core';
@@ -16,6 +17,7 @@ export class NavBarComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private router: Router,
     public accountService: AccountServiceService
   ) {}
 
@@ -24,7 +26,6 @@ export class NavBarComponent implements OnInit {
       userName: new FormControl(),
       password: new FormControl(),
     });
-
   }
 
   submit(): void {
@@ -36,11 +37,12 @@ export class NavBarComponent implements OnInit {
       password: this.loginForm.get('password')?.value,
     };
 
-    console.log(model);
-
     this.accountService.login(model).subscribe(
       (result) => {
-        console.log(result);
+        this.loginForm.get('userName')?.patchValue(null);
+        this.loginForm.get('password')?.patchValue(null);
+
+        window.location.reload();
       },
       (err) => console.log(err.error)
     );
@@ -48,5 +50,6 @@ export class NavBarComponent implements OnInit {
 
   logOut() {
     this.accountService.logOut();
+    this.router.navigate(['/home']);
   }
 }

@@ -20,7 +20,7 @@ export class BrowseProductComponent implements OnInit {
   form!: FormGroup;
   categoriesList: Category[] = [];
   products: ProductDto[] = [];
-  displayedColumns = ['Category', 'Price', 'Description', 'ProductId'];
+  displayedColumns = ['ProductId', 'Description', 'Price', 'Category'];
   dataSource!: MatTableDataSource<ProductDto[]>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -76,7 +76,6 @@ export class BrowseProductComponent implements OnInit {
       (result) => {
         this.dataSource = new MatTableDataSource(result);
         this.dataSource.paginator = this.paginator;
-        
       },
       (error) => console.log(error)
     );

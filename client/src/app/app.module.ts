@@ -22,6 +22,7 @@ import { EditProductComponent } from './products/edit-product/edit-product.compo
 import { UsersStatusComponent } from './products/users-status/users-status.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
+import { HasRoleDirective } from './has-role.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +32,7 @@ import {MatTableModule} from '@angular/material/table';
     BrowseProductComponent,
     EditProductComponent,
     UsersStatusComponent,
+    HasRoleDirective,
   ],
   imports: [
     BrowserModule,

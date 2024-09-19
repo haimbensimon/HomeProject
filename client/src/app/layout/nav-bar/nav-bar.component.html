@@ -61,18 +61,10 @@
     >
       Browse Products
     </button>
-    <button
-      mat-menu-item
-      *ngIf="accountService.currentUser$ | async"
-      routerLink="/edit/products"
-    >
+    <button mat-menu-item *appHasRole="['Admin']" routerLink="/edit/products">
       Edit Products
     </button>
-    <button
-      mat-menu-item
-      *ngIf="accountService.currentUser$ | async"
-      routerLink="/users"
-    >
+    <button *appHasRole="['Admin']" mat-menu-item routerLink="/users">
       Users Status
     </button>
     <button

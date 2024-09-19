@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ namespace API.Controllers
 
             return Ok(mapped);
         }
-
+      
         [HttpPost]
         [Route("[action]")]
         public async Task<ActionResult> AddProduct(Product product)
@@ -55,6 +54,7 @@ namespace API.Controllers
             return Ok();
         }
 
+       
         [HttpGet]
         [Route("[action]/{id}")]
         public async Task<ActionResult> RemoveProduct(int id)

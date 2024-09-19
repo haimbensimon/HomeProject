@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AccountServiceService } from 'src/app/account-service.service';
 import { registerUser } from '../models/registerModel';
 
@@ -13,7 +14,7 @@ export class RegisterComponent implements OnInit {
   @Output() cancelRgister = new EventEmitter();
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder,private router:Router,
     private accountService: AccountServiceService
   ) {}
 
@@ -32,11 +33,12 @@ export class RegisterComponent implements OnInit {
       password: this.registerForm.get('password')?.value,
     };
 
-    console.log(model);
 
     this.accountService.register(model).subscribe(
       (result) => {
-        console.log(result);
+       
+        this.router.navigateByUrl('/home')
+
       },
       (err) => console.log(err.error)
     );

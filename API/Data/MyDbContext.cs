@@ -1,21 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace API.Data
 {
-    public class MyDbContext:DbContext
+    public class MyDbContext:IdentityDbContext<AppUser,AppRole,int,
+        IdentityUserClaim<int>,AppUserRole,IdentityUserLogin<int>,
+         IdentityRoleClaim<int>,IdentityUserToken<int>>
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categorys { get; set; }
-        public DbSet<AppUser> AppUsers { get; set; }
-
+        
         public MyDbContext()
-        {
-            
+        {    
         }
         public MyDbContext(DbContextOptions<MyDbContext> options):base(options)
         {
-
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,6 +29,7 @@ namespace API.Data
 
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Product>(ent =>
             {
                 ent.ToTable("Products");
@@ -50,15 +52,20 @@ namespace API.Data
 
             modelBuilder.Entity<AppUser>(ent =>
             {
-                ent.ToTable("AppUsers");
-                ent.HasKey(p => p.Id);
-                ent.Property(p => p.Id).ValueGeneratedOnAdd();
-                ent.Property(p => p.Id).HasColumnName("ID");
-                ent.Property(p => p.UserName).HasColumnName("USER_NAME");
-                ent.Property(p => p.PasswordHash).HasColumnName("PASSWORD_HASH");
-                ent.Property(p => p.PasswordSalt).HasColumnName("PASSWORD_SALT");
+                ent.HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+               
             });
-
+            modelBuilder.Entity<AppRole>(ent =>
+            {
+                ent.HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+            
+            });
 
 
         }
