@@ -4,18 +4,26 @@ import { map, Observable, ReplaySubject } from 'rxjs';
 import { loginUser } from './account/models/loginModel';
 import { registerUser } from './account/models/registerModel';
 import { User } from './account/models/User';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountServiceService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private presenceHub: PresenceService) {}
 
   baseUrl: string = 'https://localhost:44367/api';
   currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
   register(model: registerUser): Observable<any> {
-    return this.http.post<any>(this.baseUrl + '/Account/Register', model);
+    return this.http.post<any>(this.baseUrl + '/Account/Register', model).pipe(
+      map((user: User) => {
+        if (user) {
+          this.setCurrentUser(user);
+          this.presenceHub.createConnectionHub(user);
+        }
+      })
+    );
   }
 
   login(model: loginUser): Observable<any> {
@@ -24,9 +32,8 @@ export class AccountServiceService {
         const user = respone;
 
         if (user) {
-          // localStorage.setItem('user', JSON.stringify(user));
-          // this.currentUserSource.next(user);
           this.setCurrentUser(user);
+          this.presenceHub.createConnectionHub(user);
         }
       })
     );
@@ -43,6 +50,7 @@ export class AccountServiceService {
   logOut() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.presenceHub.stopHubConnection();
   }
 
   getDecodedToken(token: string) {

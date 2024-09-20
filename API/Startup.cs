@@ -1,19 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using API.Data;
-using API;
-using Microsoft.EntityFrameworkCore;
 using API.Services.Interfaces;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +14,8 @@ using AutoMapper;
 using API.Mapping;
 using API.Entities;
 using Microsoft.AspNetCore.Identity;
-
+using API.Extensions;
+using API.SignalR;
 
 namespace API
 {
@@ -39,7 +31,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddApplicationLayer(Configuration);
             services.AddCors(option => option.AddPolicy(
                 "EnableCors", builder => 
                     builder.WithOrigins("http://localhost:4200")
@@ -48,49 +40,24 @@ namespace API
                     .AllowCredentials()
                     .Build()));
 
-            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ILogService, LogService>();
-            services.AddScoped<ITokenService, TokenService>();
 
-            services.AddDbContext<MyDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("Shop"));
-            });
-            services.AddPersistanceLayer();
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
-            services.AddIdentityCore<AppUser>(opt =>
-            {
-                opt.Password.RequireNonAlphanumeric = false;
-            })
-                .AddRoles<AppRole>()
-                .AddRoleManager<RoleManager<AppRole>>()
-                .AddSignInManager<SignInManager<AppUser>>()
-                .AddRoleValidator<RoleValidator<AppRole>>()
-                .AddEntityFrameworkStores<MyDbContext>();
+            services.AddSignalR();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-
-                });
-
-            services.AddAuthorization(opt =>
-            {
-                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            });
+            services.AddIdentityLayer(Configuration);
+            //services.AddAuthorization();
+            //services.AddAuthorization(opt =>
+            //{
+            //    opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,6 +83,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<UsersHub>("hub/presence");
             });
         }
     }

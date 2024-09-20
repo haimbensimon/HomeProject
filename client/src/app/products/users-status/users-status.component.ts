@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserStatus } from 'src/app/account/models/User';
 import { AdminPanelService } from 'src/app/admin-panel.service';
 
 @Component({
@@ -8,12 +9,13 @@ import { AdminPanelService } from 'src/app/admin-panel.service';
 })
 export class UsersStatusComponent implements OnInit {
   constructor(private adminService: AdminPanelService) {}
-  users: [] = [];
+  users:UserStatus [] = [];
 
   ngOnInit(): void {
     this.adminService.getAllUsers().subscribe(
       (result) => {
         console.log(result);
+        this.users = result;
       },
       (err) => console.log(err)
     );

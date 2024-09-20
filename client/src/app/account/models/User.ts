@@ -3,3 +3,8 @@ export interface User {
   token: string;
   roles: string[];
 }
+export interface UserStatus {
+  userName: string;
+  id: number;
+  roles: string[];
+}
