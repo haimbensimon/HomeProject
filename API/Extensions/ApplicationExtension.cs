@@ -6,6 +6,7 @@ using API.Services.Interfaces;
 using API.Services;
 using API.Mapping;
 using AutoMapper;
+using API.SignalR;
 
 namespace API.Extensions
 {
@@ -14,7 +15,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationLayer(this IServiceCollection services, IConfiguration config)
         {
 
-            //services.AddDbContext<MyDbContext>(x => x.UseSqlServer("Server=.;Database=HomeWP;trusted_connection=true"));
+            services.AddSingleton<PresenceTracker>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<MyDbContext>(options =>

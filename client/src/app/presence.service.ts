@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { BehaviorSubject } from 'rxjs';
 import { User } from './account/models/User';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PresenceService {
-  hubUrl: string = 'https://localhost:44367/hub/';
+  hubUrl: string = 'https://localhost:44367/hubs/';
   private hubConnection!: HubConnection;
+  private onLineUsersSource = new BehaviorSubject<string[]>([]);
 
+  onlineUsers$ = this.onLineUsersSource.asObservable();
   constructor() {}
 
   createConnectionHub(user: User) {
@@ -27,6 +30,10 @@ export class PresenceService {
 
     this.hubConnection.on('UserIsOffLine', (username) => {
       console.log(username + ' is disconnected');
+    });
+
+    this.hubConnection.on('GetOnlineUsers', (userNames: string[]) => {
+      this.onLineUsersSource.next(userNames);
     });
   }
 

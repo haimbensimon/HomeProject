@@ -4,18 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using API.Data;
 using API.Services.Interfaces;
 using API.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using AutoMapper;
-using API.Mapping;
-using API.Entities;
-using Microsoft.AspNetCore.Identity;
 using API.Extensions;
 using API.SignalR;
+
 
 namespace API
 {
@@ -32,13 +25,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationLayer(Configuration);
-            services.AddCors(option => option.AddPolicy(
-                "EnableCors", builder => 
-                    builder.WithOrigins("http://localhost:4200")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials()
-                    .Build()));
+
+            services.AddCors();
 
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ILogService, LogService>();
@@ -53,11 +41,7 @@ namespace API
             services.AddSignalR();
 
             services.AddIdentityLayer(Configuration);
-            //services.AddAuthorization();
-            //services.AddAuthorization(opt =>
-            //{
-            //    opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            //});
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,7 +57,12 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseCors("EnableCors");
+           
+            app.UseCors(builder =>
+                   builder.AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials()
+                   .WithOrigins("http://localhost:4200"));
 
             app.UseAuthentication();
             
@@ -83,8 +72,10 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<UsersHub>("hub/presence");
+                endpoints.MapHub<UsersHub>("hubs/presence");
             });
+
+           
         }
     }
 }

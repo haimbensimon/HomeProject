@@ -22,7 +22,7 @@ namespace API.Controllers
         
         [HttpGet]
         [Route("[action]")]
-        //[Authorize(Policy = "RequireAdminRole", AuthenticationSchemes = "Bearer")]
+        //[Authorize(Policy = "RequireAdminRole")]
         public async Task<ActionResult> GetUsersWithRoles()
         {
             var users = await _userManager.Users
